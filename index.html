@@ -2,16 +2,335 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rock Paper Scissors</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a1a;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+      max-width: 860px;
+      padding: 2rem 1rem;
+    }
+
+    /* Choice buttons */
+    .choices {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .choice-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 140px;
+      height: 140px;
+      border-radius: 16px;
+      border: 1.5px solid #3a3a3a;
+      background: #242424;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.01em;
+      transition: border-color 0.15s, transform 0.1s, background 0.15s;
+      outline: none;
+    }
+
+    .choice-btn:hover {
+      border-color: #666;
+      background: #2c2c2c;
+    }
+
+    .choice-btn:active { transform: scale(0.96); }
+
+    .choice-btn.selected {
+      border-color: #888;
+      background: #2e2e2e;
+    }
+
+    .choice-btn .emoji {
+      font-size: 46px;
+      line-height: 1;
+    }
+
+    /* Arena */
+    .arena {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    .side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-width: 120px;
+    }
+
+    .side-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .side-pick {
+      font-size: 48px;
+      line-height: 1;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-line {
+      width: 80px;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 1px;
+    }
+
+    .vs-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #888;
+      letter-spacing: 0.05em;
+      margin-top: 10px;
+    }
+
+    /* Result message */
+    .result-msg {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      text-align: center;
+      min-height: 28px;
+      margin-bottom: 2rem;
+      letter-spacing: 0.01em;
+    }
+
+    .result-msg.win  { color: #5dcaa5; }
+    .result-msg.lose { color: #f0997b; }
+    .result-msg.draw { color: #ffffff; }
+
+    /* Score */
+    .score-row {
+      display: flex;
+      width: 100%;
+      max-width: 700px;
+      border: 1px solid #2e2e2e;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .score-cell {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.1rem 0.5rem;
+      background: #242424;
+      gap: 6px;
+    }
+
+    .score-cell:not(:last-child) {
+      border-right: 1px solid #2e2e2e;
+    }
+
+    .score-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .score-num {
+      font-size: 26px;
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    /* Reset button */
+    .reset-btn {
+      padding: 10px 28px;
+      border-radius: 999px;
+      border: 1.5px solid #3a3a3a;
+      background: #242424;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .reset-btn:hover {
+      border-color: #666;
+      background: #2e2e2e;
+    }
+
+    .reset-btn:active { transform: scale(0.97); }
+  </style>
 </head>
 <body>
-  <h1>Rock Paper Scissors</h1>
-  <button data-choice="rock">✊ Rock</button>
-  <button data-choice="paper">✋ Paper</button>
-  <button data-choice="scissors">✌️ Scissors</button>
-  <p id="result">Make your move!</p>
-  <p id="score"></p>
-  <button id="reset">Reset Score</button>
+  <div class="game">
+
+    <!-- Choice buttons -->
+    <div class="choices">
+      <button class="choice-btn" data-choice="rock"     aria-label="Rock">
+        <span class="emoji">✊</span>rock
+      </button>
+      <button class="choice-btn" data-choice="paper"    aria-label="Paper">
+        <span class="emoji">✋</span>paper
+      </button>
+      <button class="choice-btn" data-choice="scissors" aria-label="Scissors">
+        <span class="emoji">✌️</span>scissors
+      </button>
+    </div>
+
+    <!-- Arena -->
+    <div class="arena">
+      <div class="side">
+        <div class="side-label">You</div>
+        <div class="side-pick" id="p-pick"></div>
+        <div class="side-line"></div>
+      </div>
+
+      <div class="vs-label">vs</div>
+
+      <div class="side">
+        <div class="side-label">Computer</div>
+        <div class="side-pick" id="c-pick"></div>
+        <div class="side-line"></div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="result-msg" id="result-msg">Pick rock, paper, or scissors to start.</div>
+
+    <!-- Score -->
+    <div class="score-row">
+      <div class="score-cell">
+        <div class="score-label">You</div>
+        <div class="score-num" id="sc-player">0</div>
+      </div>
+      <div class="score-cell">
+        <div class="score-label">Draws</div>
+        <div class="score-num" id="sc-draws">0</div>
+      </div>
+      <div class="score-cell">
+        <div class="score-label">Computer</div>
+        <div class="score-num" id="sc-cpu">0</div>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <button class="reset-btn" id="reset-btn">reset score</button>
+
+  </div>
+
   <script src="app.js"></script>
+  <script>
+    // Override initDOM with our custom elements already present
+    const CHOICES = ["rock", "paper", "scissors"];
+    const EMOJI   = { rock: "✊", paper: "✋", scissors: "✌️" };
+    const BEATS   = { rock: "scissors", paper: "rock", scissors: "paper" };
+    const score   = { player: 0, cpu: 0, draws: 0 };
+
+    const pPick  = document.getElementById("p-pick");
+    const cPick  = document.getElementById("c-pick");
+    const msgEl  = document.getElementById("result-msg");
+    const scP    = document.getElementById("sc-player");
+    const scC    = document.getElementById("sc-cpu");
+    const scD    = document.getElementById("sc-draws");
+
+    function getComputerChoice() {
+      return CHOICES[Math.floor(Math.random() * CHOICES.length)];
+    }
+
+    function updateScore() {
+      scP.textContent = score.player;
+      scC.textContent = score.cpu;
+      scD.textContent = score.draws;
+    }
+
+    document.querySelectorAll(".choice-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+
+        const p = btn.dataset.choice;
+        const c = getComputerChoice();
+
+        pPick.textContent = EMOJI[p];
+        cPick.textContent = EMOJI[c];
+
+        let winner;
+        if (p === c) {
+          winner = "draw";
+        } else if (BEATS[p] === c) {
+          winner = "player";
+        } else {
+          winner = "cpu";
+        }
+
+        msgEl.className = "result-msg";
+        const cap = s => s[0].toUpperCase() + s.slice(1);
+
+        if (winner === "draw") {
+          score.draws++;
+          msgEl.textContent = `It's a draw — you both picked ${p}.`;
+          msgEl.classList.add("draw");
+        } else if (winner === "player") {
+          score.player++;
+          msgEl.textContent = `You win! ${cap(p)} beats ${c}.`;
+          msgEl.classList.add("win");
+        } else {
+          score.cpu++;
+          msgEl.textContent = `You lose! ${cap(c)} beats ${p}.`;
+          msgEl.classList.add("lose");
+        }
+
+        updateScore();
+      });
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", () => {
+      score.player = 0; score.cpu = 0; score.draws = 0;
+      pPick.textContent = "";
+      cPick.textContent = "";
+      msgEl.className = "result-msg";
+      msgEl.textContent = "Score reset. Pick to play again.";
+      document.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+      updateScore();
+    });
+  </script>
 </body>
 </html>
