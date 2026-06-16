@@ -17,8 +17,10 @@ Jenkinsfile in repo
 
 ## Monitoring
 ### Prometheus
-Node.js app must expose /health endpoint
+Node.js app must expose `/metrics` endpoint
 - `prom-client` library
+  - `npm install prom-client express`
+- 
 
 [Prometheus config file](prometheus.yaml)
 
