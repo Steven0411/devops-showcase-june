@@ -17,10 +17,10 @@
 - Get Jenkins CI/CD pipeline working
   - Moe, Steven?, Thabo, Sankalp
 - Containerize app
-  - Thabo, Edmund, Sankalp
+  - Thabo, Edmund
 - Deploy to AWS
   - Josh, Moe, Edward, Sankalp
-  - Terraform: Josh, Moe, Thabo, Edward, Sankalp
+  - Terraform: Josh, Moe, Thabo, Edward
 - Implement monitoring
   - Edmund
 - Finish presentation slides
