@@ -50,7 +50,7 @@ Project Milestones
   - Edward, Josh, priyan
 
 Work breakdown structure (Roles)
-- Priyan - (back from doctor’s appointment at ~11:00)
+- Priyan - Ansible, presenting
 - Josh - App Development, Terraform, AWS, Presentation Quality, Presenting
 - Moe - Jenkins, don’t mind AWS, Terraform
 - Steven - Anything Technical
