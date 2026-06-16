@@ -25,9 +25,9 @@
   - Edmund
 - Finish presentation slides
 - Thursday dry run
-  - Edward, Josh
+  - Edward, Josh, priyan
 - Monday presentation
-  - Edward, Josh
+  - Edward, Josh, priyan
 
 
 ---
