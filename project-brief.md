@@ -32,21 +32,21 @@ Project Deliverables (Scope)
 
 Project Milestones
 - Vibe code an app
-  - Josh, Steven?, Sankalp
+  - Josh, Steven, Sankalp
 - Get Jenkins CI/CD pipeline working
-  - Moe, Steven?, Thabo, Sankalp
+  - Moe, Thabo 
 - Containerize app
-  - Thabo, Edmund, Sankalp
+  - Thabo, Edmund, Moe
 - Deploy to AWS
-  - Josh, Moe, Edward, Sankalp
-  - Terraform: Josh, Moe, Thabo, Edward, Sankalp
+  - Josh, Edward, Sankalp, steven, 
+  - Terraform: Josh, priyan, Edward, Sankalp, steven
 - Implement monitoring
   - Edmund
 - Finish presentation slides
 - Thursday dry run
-  - Edward, Josh
+  - Edward, Josh, priyan
 - Monday presentation
-  - Edward, Josh
+  - Edward, Josh, priyan
 
 Work breakdown structure (Roles)
 - Priyan - (back from doctor’s appointment at ~11:00)
