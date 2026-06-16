@@ -20,7 +20,7 @@ Jenkinsfile in repo
 Node.js app must expose `/metrics` endpoint
 - `prom-client` library
   - `npm install prom-client express`
-- 
+- [Exposing /metrics endpoint, example js](metrics-endpoint.js)
 
 [Prometheus config file](prometheus.yaml)
 
