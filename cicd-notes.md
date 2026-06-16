@@ -15,8 +15,14 @@ Jenkinsfile in repo
 
 
 ## Monitoring
+### Prometheus
 Node.js app must expose /health endpoint
 - `prom-client` library
 
-### Prometheus
+[Prometheus config file](prometheus.yaml)
+
+Run Prometheus and Grafana as containers...
+- Focus on HTTP requests, latency, error rates
+- Not just CPU graphs (or monitoring Docker itself)
+
 
