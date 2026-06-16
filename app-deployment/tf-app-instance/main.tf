@@ -5,6 +5,12 @@ provider "aws" {
     region = var.default_region
 }
 
+data "aws_key_pair" "showcase_team" {
+  for_each = toset(var.team_aws_key_names)
+  key_name = each.value
+  include_public_key = true
+}
+
 
 resource "aws_security_group" "app_sg"{
     name = var.security_group_name
@@ -50,7 +56,10 @@ resource "aws_instance" "app_instance" {
     subnet_id = var.default_public_subnet_id 
     key_name = var.my_key_pair
     vpc_security_group_ids  = [aws_security_group.app_sg.id]
-    #user_data = file("${path.module}/user-data.sh") if/when use user data
+    
+    user_data = templatefile("${path.module}/user-data.tftpl", {
+    public_keys = [for k in data.aws_key_pair.showcase_team : k.public_key]
+  })
     tags = {
         Name = var.instance_name_tag
     }

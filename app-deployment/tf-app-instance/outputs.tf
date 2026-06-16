@@ -1,3 +1,4 @@
-output "app_public_ip" {
-    value = aws_instance.app_instance.public_ip
+output "elastic_ip" {
+  # Or output just the clean numbers:
+  value = aws_eip_association.static_ip_assoc.public_ip
 }
