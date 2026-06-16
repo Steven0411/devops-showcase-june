@@ -42,11 +42,14 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to AWS EC2') {
             steps {
                 sh """
-                docker compose pull
-                docker compose up -d
+                ssh -o StrictHostKeyChecking=no ubuntu@EC2_PUBLIC_IP '
+                    cd devops-showcase-june &&
+                    docker compose pull &&
+                    docker compose up -d
+                '
                 """
             }
         }
