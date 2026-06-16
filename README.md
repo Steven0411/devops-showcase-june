@@ -34,7 +34,7 @@ Project Milestones
 - Vibe code an app
   - Josh, Steven, Sankalp
 - Get Jenkins CI/CD pipeline working
-  - Moe, Thabo 
+  - Moe, Thabo, Edmund
 - Containerize app
   - Thabo, Edmund, Moe
 - Deploy to AWS
