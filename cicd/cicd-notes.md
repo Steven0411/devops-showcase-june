@@ -10,6 +10,9 @@
    - Pull new image
    - Start new container via docker-compose
    - [App + monitoring stack docker-compose.yaml](docker-compose.yaml)
+     - NOTE: NEEDS TO BE UPDATED TO DEPLOY TO EC2
+     - SSH into EC2, `docker compose up -d`
+     - EC2 ports: `22` (SSH), `3000` (app), `3001` (grafana), `9090` (prometheus)
 
 Jenkinsfile in repo
 - Pipeline points to this via filepath
