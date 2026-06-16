@@ -9,6 +9,7 @@
    - Stop old container
    - Pull new image
    - Start new container via docker-compose
+   - [App + monitoring stack docker-compose.yaml](docker-compose.yaml)
 
 Jenkinsfile in repo
 - Pipeline points to this via filepath
