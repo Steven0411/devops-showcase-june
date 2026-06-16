@@ -38,10 +38,11 @@ Project Milestones
 - Containerize app
   - Thabo, Edmund, Moe
 - Deploy to AWS
-  - Josh, Edward, Sankalp, steven, 
-  - Terraform: Josh, priyan, Edward, Sankalp, steven
+  - Josh, Edward, steven, 
+  - Terraform: Josh, Edward, steven
+  - ansible: priyan
 - Implement monitoring
-  - Edmund
+  - Edmund, sankalp
 - Finish presentation slides
 - Thursday dry run
   - Edward, Josh, priyan
