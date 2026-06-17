@@ -46,6 +46,13 @@ cp .env.example .env      # (Windows: copy .env.example .env)
 npm start                 # or: npm run dev  (auto-reload on save)
 ```
 
+## Run the app using docker
+# From the devops-showcase directory run the following command
+```bash
+# run the app and database images from the docker compose file
+docker compose up -d
+```
+
 Then open **http://localhost:3000** in your browser.
 
 > Running from VS Code: open this folder, then use the integrated terminal for
