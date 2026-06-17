@@ -14,11 +14,11 @@ pipeline {
 
         stage('Install & Test') {
             steps {
-                sh 'ls'
-                sh 'cd rps-app'
-                sh 'ls'
-                sh 'npm ci'
-                sh 'npm test'
+                sh '''
+                cd rps-app
+                npm ci
+                npm test
+                '''
             }
         }
 
