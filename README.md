@@ -1,5 +1,5 @@
 Project name
-- Snakes & Ladders
+- Rock, Paper, Scissors
 
 Date
 - 22 / 06 / 2026
