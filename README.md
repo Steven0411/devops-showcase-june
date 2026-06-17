@@ -35,14 +35,11 @@ Project Milestones
   - Josh, Steven, Sankalp
 - Get Jenkins CI/CD pipeline working
   - Moe, Thabo, Edmund
-- Containerize app
-  - Thabo, Edmund, Moe
-- Deploy to AWS
-  - Josh, Edward, steven, 
-  - Terraform: Josh, Edward, steven
-  - ansible: priyan
-- Implement monitoring
-  - Edmund, sankalp
+  - **Containerization**: Thabo, Edmund, Moe
+  - **AWS**: Josh, Edward, steven, 
+  - **Terraform**: Josh, Edward, steven
+  - **ansible**: priyan
+  - **Monitoring**: Edmund, sankalp
 - Finish presentation slides
 - Thursday dry run
   - Edward, Josh, priyan
