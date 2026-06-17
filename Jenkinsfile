@@ -8,12 +8,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/Steven0411/devops-showcase-june.git'
-            }
-        }
-
         stage('Install & Test') {
             steps {
                 sh 'npm ci'
@@ -44,7 +38,7 @@ pipeline {
 
         stage('Deploy to AWS EC2') {
             steps {
-                sshagent(credentials: ['tech603-thabo-aws-key'])
+                sshagent(credentials: ['tech603-thabo-aws-key']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@52.31.15.176 '
                         cd devops-showcase-june &&
@@ -52,6 +46,7 @@ pipeline {
                         docker compose up -d
                     '
                     """
+                }
             }
         }
     }
