@@ -11,6 +11,8 @@ services:
     restart: unless-stopped
     ports:
       - "27017:27017"
+    volumes:
+      - rps-mongodb-data:/data/db
   app:
     image: ukduw/showcase-node-app:latest
     container_name: showcase-node-app
@@ -44,3 +46,6 @@ services:
     restart: unless-stopped
     depends_on:
       - prometheus
+
+volumes:
+  rps-mongodb-data: 
