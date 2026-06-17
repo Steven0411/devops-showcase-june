@@ -18,7 +18,7 @@
 const readline = require("readline");
 
 const MOVES = ["rock", "paper", "scissors"];
-const EMOJI = { rock: "🪨", paper: "📄", scissors: "💥" };
+const EMOJI = { rock: "🪨", paper: "📄", scissors: "✂️" };
 // What beats what:  beats[x] is the move that DEFEATS x.
 const BEATS = { rock: "paper", paper: "scissors", scissors: "rock" };
 // What x defeats:
