@@ -14,6 +14,7 @@ pipeline {
 
         stage('Install & Test') {
             steps {
+                sh 'cd rps-app'
                 sh 'npm ci'
                 sh 'npm test'
             }
