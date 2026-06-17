@@ -15,7 +15,8 @@ pipeline {
         stage('Install & Test') {
             steps {
                 sh 'ls'
-                sh 'cd devops-showcase-june/rps-app'
+                sh 'cd rps-app'
+                sh 'ls'
                 sh 'npm ci'
                 sh 'npm test'
             }
