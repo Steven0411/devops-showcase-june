@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'nodejs'
+    }
+
     environment {
         IMAGE_NAME = "ukduw/showcase-node-app"
         CONTAINER_NAME = "showcase-node-app"
