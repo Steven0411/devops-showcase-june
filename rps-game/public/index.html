@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rock · Paper · Scissors</title>
+<style>
+  :root {
+    --bg: #1a1a1a;
+    --panel: #242424;
+    --panel-hover: #2e2e2e;
+    --border: #3a3a3a;
+    --text: #f5f5f5;
+    --muted: #8a8a8a;
+    --win: #4ade80;
+    --lose: #f87171;
+    --draw: #fbbf24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .game { width: 100%; max-width: 640px; }
+
+  /* player name */
+  .player-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .player-row input {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    width: 220px;
+    outline: none;
+  }
+  .player-row input:focus { border-color: var(--text); }
+  .player-row .status { font-size: 12px; color: var(--muted); min-width: 90px; }
+
+  /* choice buttons */
+  .choices { display: flex; justify-content: center; gap: 18px; margin-top: 8px; }
+  .choice {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    width: 92px; height: 92px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    color: var(--text);
+  }
+  .choice:hover { background: var(--panel-hover); transform: translateY(-3px); }
+  .choice:active { transform: translateY(0); }
+  .choice.selected { border-color: var(--text); }
+  .choice .emoji { font-size: 30px; line-height: 1; }
+  .choice .label { font-size: 13px; color: var(--muted); }
+
+  /* vs display */
+  .arena { display: flex; align-items: center; justify-content: center; gap: 40px; margin-top: 30px; }
+  .side { text-align: center; min-width: 90px; }
+  .side .who { font-size: 12px; letter-spacing: 1px; color: var(--muted); }
+  .side .pick { font-size: 40px; margin-top: 10px; min-height: 48px; line-height: 1; }
+  .side .pick.empty::after {
+    content: ""; display: inline-block; width: 40px;
+    border-bottom: 3px solid var(--muted); vertical-align: middle; margin-bottom: 10px;
+  }
+  .vs { color: var(--muted); font-size: 14px; align-self: center; padding-top: 18px; }
+
+  /* result message */
+  .message { text-align: center; margin-top: 26px; font-size: 18px; font-weight: 600; min-height: 24px; }
+  .message.win { color: var(--win); }
+  .message.lose { color: var(--lose); }
+  .message.draw { color: var(--draw); }
+
+  /* scoreboard */
+  .scoreboard {
+    display: flex; margin-top: 30px;
+    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  }
+  .score { flex: 1; text-align: center; padding: 18px 10px; border-right: 1px solid var(--border); }
+  .score:last-child { border-right: none; }
+  .score .stat { font-size: 12px; letter-spacing: 1px; color: var(--muted); }
+  .score .num { font-size: 28px; font-weight: 700; margin-top: 6px; }
+
+  /* reset */
+  .actions { text-align: center; margin-top: 22px; }
+  .reset {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 22px; border-radius: 10px; font-size: 14px; cursor: pointer; transition: background .12s ease;
+  }
+  .reset:hover { background: var(--panel-hover); }
+
+  .skill { text-align: center; margin-top: 14px; font-size: 12px; color: var(--muted); }
+
+  /* leaderboard */
+  .leaderboard { margin-top: 34px; }
+  .leaderboard h2 {
+    font-size: 13px; letter-spacing: 1px; color: var(--muted);
+    text-align: center; margin-bottom: 12px; font-weight: 600;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-size: 11px; letter-spacing: 1px; font-weight: 600; }
+  td.num, th.num { text-align: right; }
+  tr.me td { color: var(--win); }
+  .empty-row td { text-align: center; color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="game">
+    <div class="player-row">
+      <input id="playerName" type="text" placeholder="Enter your name…" maxlength="24" />
+      <span class="status" id="dbStatus">offline</span>
+    </div>
+
+    <div class="choices" id="choices">
+      <button class="choice" data-move="rock"><span class="emoji">🪨</span><span class="label">rock</span></button>
+      <button class="choice" data-move="paper"><span class="emoji">📄</span><span class="label">paper</span></button>
+      <button class="choice" data-move="scissors"><span class="emoji">✂️</span><span class="label">scissors</span></button>
+    </div>
+
+    <div class="arena">
+      <div class="side"><div class="who">YOU</div><div class="pick empty" id="youPick"></div></div>
+      <div class="vs">vs</div>
+      <div class="side"><div class="who">COMPUTER</div><div class="pick empty" id="compPick"></div></div>
+    </div>
+
+    <div class="message" id="message">Enter a name, then pick your move.</div>
+
+    <div class="scoreboard">
+      <div class="score"><div class="stat">YOU</div><div class="num" id="scoreYou">0</div></div>
+      <div class="score"><div class="stat">DRAWS</div><div class="num" id="scoreDraw">0</div></div>
+      <div class="score"><div class="stat">COMPUTER</div><div class="num" id="scoreComp">0</div></div>
+    </div>
+
+    <div class="actions"><button class="reset" id="reset">reset score</button></div>
+    <div class="skill" id="skill">Computer skill: Warming up</div>
+
+    <div class="leaderboard">
+      <h2>LEADERBOARD</h2>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Player</th><th class="num">Win %</th><th class="num">W</th><th class="num">D</th><th class="num">L</th></tr>
+        </thead>
+        <tbody id="lbBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+"use strict";
+
+const MOVES = ["rock", "paper", "scissors"];
+const EMOJI = { rock: "🪨", paper: "📄", scissors: "✂️" };
+const BEATS = { rock: "paper", paper: "scissors", scissors: "rock" };
+
+// --- Adaptive bot ---
+class AdaptiveBot {
+  constructor() { this.reset(); }
+  reset() {
+    this.history = []; this.freq = { rock: 0, paper: 0, scissors: 0 };
+    this.order1 = {}; this.order2 = {}; this.round = 0;
+  }
+  skill() { return Math.min(0.95, this.round / (this.round + 6)); }
+  predict() {
+    const n = this.history.length; if (n === 0) return null;
+    const last1 = this.history[n - 1];
+    const last2 = n >= 2 ? this.history[n - 2] + "," + last1 : null;
+    const fromTable = (table, key) => {
+      const row = key != null ? table[key] : null; if (!row) return null;
+      let best = null, total = 0, bestCount = 0;
+      for (const m of MOVES) { const c = row[m] || 0; total += c; if (c > bestCount) { bestCount = c; best = m; } }
+      if (total < 2 || !best) return null;
+      return { move: best, confidence: bestCount / total };
+    };
+    return fromTable(this.order2, last2) || fromTable(this.order1, last1) || this._fromFreq();
+  }
+  _fromFreq() {
+    let best = null, total = 0, bestCount = -1;
+    for (const m of MOVES) { total += this.freq[m]; if (this.freq[m] > bestCount) { bestCount = this.freq[m]; best = m; } }
+    if (total < 2) return null;
+    return { move: best, confidence: bestCount / total };
+  }
+  chooseMove() {
+    const p = this.predict(); const s = this.skill();
+    if (!p || Math.random() > s * p.confidence) return MOVES[Math.floor(Math.random() * 3)];
+    return BEATS[p.move];
+  }
+  learn(playerMove) {
+    const h = this.history;
+    if (h.length >= 1) { const k = h[h.length - 1]; (this.order1[k] = this.order1[k] || { rock:0,paper:0,scissors:0 })[playerMove]++; }
+    if (h.length >= 2) { const k = h[h.length-2]+","+h[h.length-1]; (this.order2[k] = this.order2[k] || { rock:0,paper:0,scissors:0 })[playerMove]++; }
+    this.freq[playerMove]++; h.push(playerMove); this.round++;
+  }
+}
+function skillLabel(s) {
+  if (s < 0.25) return "Warming up";
+  if (s < 0.5) return "Learning";
+  if (s < 0.7) return "Sharpening";
+  if (s < 0.85) return "Locked in";
+  return "Mind reader";
+}
+
+// --- State ---
+const bot = new AdaptiveBot();
+const score = { you: 0, draw: 0, comp: 0 };
+
+const els = {
+  name: document.getElementById("playerName"),
+  dbStatus: document.getElementById("dbStatus"),
+  youPick: document.getElementById("youPick"),
+  compPick: document.getElementById("compPick"),
+  message: document.getElementById("message"),
+  scoreYou: document.getElementById("scoreYou"),
+  scoreDraw: document.getElementById("scoreDraw"),
+  scoreComp: document.getElementById("scoreComp"),
+  skill: document.getElementById("skill"),
+  choices: document.querySelectorAll(".choice"),
+  lbBody: document.getElementById("lbBody"),
+};
+
+const playerName = () => els.name.value.trim();
+
+// --- API helpers (gracefully no-op if the server/DB is down) ---
+async function api(path, opts) {
+  try {
+    const res = await fetch(path, opts);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    els.dbStatus.textContent = "● saved to DB";
+    els.dbStatus.style.color = "var(--win)";
+    return await res.json();
+  } catch (e) {
+    els.dbStatus.textContent = "● offline (not saved)";
+    els.dbStatus.style.color = "var(--lose)";
+    return null;
+  }
+}
+
+async function loadPlayer() {
+  const name = playerName();
+  if (!name) return;
+  const data = await api("/api/score/" + encodeURIComponent(name));
+  if (data) {
+    score.you = data.wins; score.draw = data.draws; score.comp = data.losses;
+    bot.reset();
+    render(null, null, null);
+    els.message.className = "message";
+    els.message.textContent = "Welcome back, " + name + "! Pick your move.";
+  }
+  refreshLeaderboard();
+}
+
+async function refreshLeaderboard() {
+  const rows = await api("/api/leaderboard");
+  const me = playerName().toLowerCase();
+  els.lbBody.innerHTML = "";
+  if (!rows || rows.length === 0) {
+    els.lbBody.innerHTML = '<tr class="empty-row"><td colspan="6">No games recorded yet.</td></tr>';
+    return;
+  }
+  rows.forEach((p, i) => {
+    const tr = document.createElement("tr");
+    if (p.name.toLowerCase() === me) tr.className = "me";
+    tr.innerHTML =
+      "<td>" + (i + 1) + "</td>" +
+      "<td>" + escapeHtml(p.name) + "</td>" +
+      '<td class="num">' + p.winRate + "%</td>" +
+      '<td class="num">' + p.wins + "</td>" +
+      '<td class="num">' + p.draws + "</td>" +
+      '<td class="num">' + p.losses + "</td>";
+    els.lbBody.appendChild(tr);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// --- Render ---
+function render(youMove, compMove, result) {
+  els.youPick.textContent = youMove ? EMOJI[youMove] : "";
+  els.compPick.textContent = compMove ? EMOJI[compMove] : "";
+  els.youPick.classList.toggle("empty", !youMove);
+  els.compPick.classList.toggle("empty", !compMove);
+
+  els.message.className = "message";
+  if (result === "win") { els.message.textContent = "You win this round! 🎉"; els.message.classList.add("win"); }
+  else if (result === "loss") { els.message.textContent = "Computer wins this round."; els.message.classList.add("lose"); }
+  else if (result === "draw") { els.message.textContent = "It's a draw."; els.message.classList.add("draw"); }
+
+  els.scoreYou.textContent = score.you;
+  els.scoreDraw.textContent = score.draw;
+  els.scoreComp.textContent = score.comp;
+  els.skill.textContent = "Computer skill: " + skillLabel(bot.skill());
+}
+
+// --- Play a round ---
+async function play(playerMove) {
+  const name = playerName();
+  if (!name) {
+    els.message.className = "message lose";
+    els.message.textContent = "Enter your name first ☝️";
+    els.name.focus();
+    return;
+  }
+  const compMove = bot.chooseMove();
+  bot.learn(playerMove);
+
+  let result;
+  if (playerMove === compMove) { result = "draw"; score.draw++; }
+  else if (BEATS[playerMove] === compMove) { result = "loss"; score.comp++; }
+  else { result = "win"; score.you++; }
+
+  els.choices.forEach((c) => c.classList.toggle("selected", c.dataset.move === playerMove));
+  render(playerMove, compMove, result);
+
+  const data = await api("/api/round", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, result }),
+  });
+  if (data) { score.you = data.wins; score.draw = data.draws; score.comp = data.losses; render(playerMove, compMove, result); }
+  refreshLeaderboard();
+}
+
+// --- Events ---
+els.choices.forEach((btn) => btn.addEventListener("click", () => play(btn.dataset.move)));
+
+document.addEventListener("keydown", (e) => {
+  if (document.activeElement === els.name) return; // don't hijack typing
+  const map = { r: "rock", p: "paper", s: "scissors" };
+  const m = map[e.key.toLowerCase()];
+  if (m) play(m);
+});
+
+els.name.addEventListener("change", loadPlayer);
+els.name.addEventListener("blur", loadPlayer);
+
+document.getElementById("reset").addEventListener("click", async () => {
+  const name = playerName();
+  score.you = 0; score.draw = 0; score.comp = 0;
+  bot.reset();
+  els.choices.forEach((c) => c.classList.remove("selected"));
+  render(null, null, null);
+  els.message.className = "message";
+  els.message.textContent = "Score reset. Pick to play again.";
+  if (name) { await api("/api/reset", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  }); refreshLeaderboard(); }
+});
+
+render(null, null, null);
+refreshLeaderboard();
+</script>
+</body>
+</html>
