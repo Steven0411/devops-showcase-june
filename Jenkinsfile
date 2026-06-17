@@ -46,7 +46,7 @@ pipeline {
             steps {
                 sshagent(credentials: ['tech603-thabo-aws-key'])
                     sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@EC2_PUBLIC_IP '
+                    ssh -o StrictHostKeyChecking=no ubuntu@52.31.15.176 '
                         cd devops-showcase-june &&
                         docker compose pull &&
                         docker compose up -d
