@@ -4,13 +4,12 @@
 provider "aws" {
     region = var.default_region
 }
-
+# gets key names
 data "aws_key_pair" "showcase_team" {
   for_each = toset(var.team_aws_key_names)
   key_name = each.value
   include_public_key = true
 }
-
 
 resource "aws_security_group" "app_sg"{
     name = var.security_group_name

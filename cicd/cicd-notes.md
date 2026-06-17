@@ -34,3 +34,9 @@ Run Prometheus and Grafana as containers...
 - Not just CPU graphs (or monitoring Docker itself)
 
 
+### Grafana
+1. App exposes `/metrics`, port `3000`
+2. Prometheus periodically scrapes it, port `9090`
+3. User accesses Grafana via `http://app-ip:3001`
+   - Log in and add Prometheus as data source
+   - `http://prometheus:9090` - this is the container name, no EC2 IP, since it's referring to Docker Compose's internal network

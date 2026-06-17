@@ -1,7 +1,0 @@
-global:
-  scrape_interval: 5s
-
-scrape_configs:
-  - job_name: "APP NAME HERE"
-    static_configs:
-      - targets: ["APP-HERE:3000"]

@@ -1,29 +1,33 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'nodejs'
+    }
+
     environment {
-        IMAGE_NAME = "yourdockerhubuser/node-app"
-        CONTAINER_NAME = "node-app"
+        IMAGE_NAME = "ukduw/showcase-node-app"
+        CONTAINER_NAME = "showcase-node-app"
     }
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/Steven0411/devops-showcase-june.git'
-            }
-        }
-
         stage('Install & Test') {
             steps {
-                sh 'npm install'
-                sh 'npm test || true'
+                sh '''
+                cd rps-app
+                npm ci
+                '''
+                // removed npm test since there're no tests... throws error
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $IMAGE_NAME:${BUILD_NUMBER} ."
+                sh '''
+                cd rps-app
+                docker build -t $IMAGE_NAME:latest .
+                '''
             }
         }
 
@@ -31,12 +35,12 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS'
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo $PASS | docker login -u $USER --password-stdin
-                    docker push $IMAGE_NAME:${BUILD_NUMBER}
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker push $IMAGE_NAME:latest
                     '''
                 }
             }
@@ -44,13 +48,15 @@ pipeline {
 
         stage('Deploy to AWS EC2') {
             steps {
-                sh """
-                ssh -o StrictHostKeyChecking=no ubuntu@EC2_PUBLIC_IP '
-                    cd devops-showcase-june &&
-                    docker compose pull &&
-                    docker compose up -d
-                '
-                """
+                sshagent(credentials: ['tech603-thabo-aws-key']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ubuntu@52.31.15.176 '
+                        cd devops-showcase-june &&
+                        docker compose pull &&
+                        docker compose up -d
+                    '
+                    """
+                }
             }
         }
     }
