@@ -44,7 +44,7 @@ pipeline {
 
         stage('Deploy to AWS EC2') {
             steps {
-                sshagent(credentials: ['ec2-key'])
+                sshagent(credentials: ['tech603-thabo-aws-key'])
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@EC2_PUBLIC_IP '
                         cd devops-showcase-june &&
