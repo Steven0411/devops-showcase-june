@@ -24,7 +24,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $IMAGE_NAME:latest ."
+                sh '''
+                cd rps-app
+                docker build -t $IMAGE_NAME:latest .
+                '''
             }
         }
 
