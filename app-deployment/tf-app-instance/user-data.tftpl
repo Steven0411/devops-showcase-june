@@ -1,9 +1,9 @@
-#!/bin/bash
+!/bin/bash
 
-git clone https://github.com/Steven0411/devops-showcase-june.git /home/ubuntu/devops-showcase-june
+git clone -b rps-game https://github.com/Steven0411/devops-showcase-june.git /home/ubuntu/devops-showcase-june
 
 cd /home/ubuntu/devops-showcase-june/
 
-docker build -t ukduw/showcase-node-app:latest ./rps-game
+docker build -t ukduw/showcase-node-app:latest ./rps-app
 
 docker compose up -d 
