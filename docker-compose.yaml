@@ -1,14 +1,30 @@
 version: "3.8"
 
 services:
+  mongodb:
 
+    # the version of mongodb used for the app
+    image: mongo:8.2.5
+    container_name: mongodb
+    
+    # same as enabling it
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
   app:
     image: ukduw/showcase-node-app:latest
     container_name: showcase-node-app
-    ports:
-      - "3000:3000"
     restart: unless-stopped
+    ports:
+      - "80:3000"
+    environment:
 
+      # creates the environment variable to connect to the database without entering container
+      MONGODB_URI: mongodb://mongodb:27017/rps
+
+    # sets the dependency so that the db is always created first
+    depends_on:
+      - mongodb
   prometheus:
     image: prom/prometheus
     container_name: prometheus
