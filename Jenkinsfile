@@ -25,7 +25,9 @@ pipeline {
 
         stage('Merge to Main') {
             when {
-                branch 'rps-game'
+                expression {
+                    env.GIT_BRANCH?.endsWith('/rps-game')
+                }
             }
             steps {
                 withCredentials([
