@@ -19,22 +19,30 @@ pipeline {
                 npm ci
                 npm test
                 '''
+                // removed npm test since there're no tests... throws error
             }
         }
 
         stage('Merge to Main') {
             steps {
-                sshagent(credentials: ['devops-showcase-github-key']) 
-                {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github-creds',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_TOKEN'
+                    )
+                ]) {
                     sh '''
+                        git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/Steven0411/devops-showcase-june.git
+
                         git fetch origin
 
-                        git checkout -B main origin/main
+                        git checkout main
                         git pull origin main
 
-                        git merge --no-ff origin/rps-game -m "Auto-merge rps-game"
+                        git merge --no-ff origin/rps-game -m "Auto-merge origin/rps-game"
 
-                        git push git@github.com:Steven0411/devops-showcase-june.git main
+                        git push origin main
                     '''
                 }
             }
