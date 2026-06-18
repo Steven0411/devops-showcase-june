@@ -13,6 +13,7 @@ services:
       - "27017:27017"
     volumes:
       - rps-mongodb-data:/data/db
+
   app:
     image: ukduw/showcase-node-app:latest
     container_name: showcase-node-app
@@ -27,6 +28,7 @@ services:
     # sets the dependency so that the db is always created first
     depends_on:
       - mongodb
+      
   prometheus:
     image: prom/prometheus
     container_name: prometheus

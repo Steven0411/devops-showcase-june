@@ -17,6 +17,7 @@ pipeline {
                 sh '''
                 cd rps-app
                 npm ci
+                npm test
                 '''
                 // removed npm test since there're no tests... throws error
             }
