@@ -23,6 +23,32 @@ pipeline {
             }
         }
 
+        stage('Merge to Main') {
+            when {
+                branch 'rps-game/*'
+            }
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'git-creds',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_PASS'
+                    )
+                ]) {
+                    sh '''
+                        git fetch origin
+
+                        git checkout main
+                        git pull origin main
+
+                        git merge --no-ff rps-game -m "Auto-merge rps-game"
+
+                        git push origin main
+                    '''
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh '''
