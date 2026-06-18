@@ -55,7 +55,11 @@ resource "aws_instance" "app_instance" {
     subnet_id = var.default_public_subnet_id 
     key_name = var.my_key_pair
     vpc_security_group_ids  = [aws_security_group.app_sg.id]
-    
+    root_block_device {
+    volume_size           = 20       
+    volume_type           = "gp3"    
+    delete_on_termination = true
+  }
     user_data = templatefile("${path.module}/user-data.tftpl", {
     public_keys = [for k in data.aws_key_pair.showcase_team : k.public_key]
   })
