@@ -24,13 +24,8 @@ pipeline {
 
         stage('Merge to Main') {
             steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'git-creds',
-                        usernameVariable: 'GIT_USER',
-                        passwordVariable: 'GIT_PASS'
-                    )
-                ]) {
+                sshagent(credentials: ['devops-showcase-github-key']) 
+                {
                     sh '''
                         git fetch origin
 
@@ -39,7 +34,7 @@ pipeline {
 
                         git merge --no-ff origin/rps-game -m "Auto-merge rps-game"
 
-                        git push https://${GIT_USER}:${GIT_PASS}@github.com/Steven0411/devops-showcase-june.git main
+                        git push git@github.com:Steven0411/devops-showcase-june.git main
                     '''
                 }
             }
