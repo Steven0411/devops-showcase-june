@@ -33,6 +33,8 @@ pipeline {
                     )
                 ]) {
                     sh '''
+                        git remote set-url origin https://${GIT_USER}:${GIT_PASS}@github.com/Steven0411/devops-showcase-june.git
+
                         git fetch origin
 
                         git checkout main
