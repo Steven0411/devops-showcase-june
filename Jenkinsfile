@@ -24,7 +24,7 @@ pipeline {
 
         stage('Merge to Main') {
             when {
-                branch 'rps-game/*'
+                branch 'rps-game'
             }
             steps {
                 withCredentials([
