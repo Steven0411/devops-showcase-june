@@ -37,7 +37,7 @@ pipeline {
                     sh '''
                         git fetch origin
 
-                        git checkout main
+                        git checkout -B main origin/main
                         git pull origin main
 
                         git merge --no-ff rps-game -m "Auto-merge rps-game"
