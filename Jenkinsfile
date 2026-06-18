@@ -38,7 +38,7 @@ pipeline {
                         git checkout main
                         git pull origin main
 
-                        git merge --no-ff rps-game -m "Auto-merge rps-game"
+                        git merge --no-ff origin/rps-game -m "Auto-merge origin/rps-game"
 
                         git push origin main
                     '''
