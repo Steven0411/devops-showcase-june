@@ -27,13 +27,13 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: 'git-creds',
+                        credentialsId: 'github-creds',
                         usernameVariable: 'GIT_USER',
-                        passwordVariable: 'GIT_PASS'
+                        passwordVariable: 'GIT_TOKEN'
                     )
                 ]) {
                     sh '''
-                        git remote set-url origin https://${GIT_USER}:${GIT_PASS}@github.com/Steven0411/devops-showcase-june.git
+                        git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/Steven0411/devops-showcase-june.git
 
                         git fetch origin
 
