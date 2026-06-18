@@ -37,7 +37,7 @@ pipeline {
                         git checkout -B main origin/main
                         git pull origin main
 
-                        git merge --no-ff rps-game -m "Auto-merge rps-game"
+                        git merge --no-ff origin/rps-game -m "Auto-merge rps-game"
 
                         git push https://${GIT_USER}:${GIT_PASS}@github.com/Steven0411/devops-showcase-june.git main
                     '''
