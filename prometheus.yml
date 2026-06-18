@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "showcase-node-app"
+    static_configs:
+      - targets: ["showcase-node-app:3000"]

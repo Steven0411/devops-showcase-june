@@ -1,13 +1,9 @@
 #!/bin/bash
 
-# Initialize folder structure 
-mkdir -p /home/ubuntu/.ssh
-chmod 700 /home/ubuntu/.ssh
+git clone -b rps-game https://github.com/Steven0411/devops-showcase-june.git /home/ubuntu/devops-showcase-june
 
-# add each public key
-%{ for key in public_keys ~}
-echo "${trimspace(key)}" >> /home/ubuntu/.ssh/authorized_keys
-%{ endfor ~}
+cd /home/ubuntu/devops-showcase-june/
 
-chmod 600 /home/ubuntu/.ssh/authorized_keys
-chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+docker build -t ukduw/showcase-node-app:latest ./rps-app
+
+docker compose up -d 
