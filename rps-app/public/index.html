@@ -27,6 +27,24 @@
     justify-content: center;
     padding: 24px;
   }
+  .logo {
+  position: fixed;
+  top: 20px;
+  left: 24px;          
+  transform: none;     /* remove the translateX */
+  z-index: 1000;
+}
+
+.logo img {
+  height: 90px;
+  width: auto;
+  filter: drop-shadow(0 0 8px rgba(233, 30, 140, 0.5));
+}
+
+/* push content down so it doesn't hide under the navbar */
+body {
+  padding-top: 80px;
+}
   .game { width: 100%; max-width: 640px; }
 
   /* player name */
@@ -120,6 +138,9 @@
 </style>
 </head>
 <body>
+  <div class="logo">
+    <img src="sparta-logo.svg" alt="Sparta Global Logo">
+  </div>
   <div class="game">
     <div class="player-row">
       <input id="playerName" type="text" placeholder="Enter your name…" maxlength="24" />
