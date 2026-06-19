@@ -23,7 +23,7 @@ resource "aws_instance" "worker_instance" {
     associate_public_ip_address = true
     subnet_id = var.default_public_subnet_id 
     key_name = var.my_key_pair
-    user_data = file("${path.module}/install-java.sh")
+    #user_data = file("${path.module}/install-java.sh")
     vpc_security_group_ids  = [aws_security_group.worker_sg.id]
    
     root_block_device {
