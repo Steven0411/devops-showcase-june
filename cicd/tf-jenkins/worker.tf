@@ -6,7 +6,9 @@ resource "aws_security_group" "worker_sg"{
         from_port = var.port_1
         to_port = var.port_1
         protocol = "tcp"
-        cidr_blocks =   ["${chomp(data.http.my_ipv4.response_body)}/32", "${aws_eip_association.server_static_ip_assoc.public_ip}/32"]
+        cidr_blocks =   ["${chomp(data.http.my_ipv4.response_body)}/32", 
+                        "${aws_eip_association.server_static_ip_assoc.public_ip}/32",
+                        "${aws_instance.server_instance.private_ip}/32"]
     }
     egress {
         from_port   = 0
